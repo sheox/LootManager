@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EFT Loot Manager</title>
+    <title>EFT Loot Manager - Loot Manager</title>
     <link rel="stylesheet" href="style.css">
     <script src="loot-manager.js" defer></script>
 </head>
+
 <body>
     <header>
         <div class="header-content">
@@ -20,17 +22,36 @@
             </nav>
         </div>
     </header>
+
     <div class="container">
         <h2>Loot Manager</h2>
-        <p>Manage your loot items here.</p>
-        <button id="fetchItemsBtn">Fetch Items</button>
-        <button id="saveItemsBtn">Save Selected Items</button>
-        <input type="file" id="fileUpload" accept=".ini" />
-        <input type="text" id="searchBox" placeholder="Search items..." />
-        <div id="itemList"></div>
+        <div class="actions">
+            <button id="fetchItemsBtn">Fetch Items</button>
+            <button id="saveItemsBtn">Save Selected Items</button>
+            <input type="file" id="fileUpload" accept=".ini" disabled />
+            <input type="text" id="searchBox" placeholder="Search Items...">
+        </div>
+        <div class="table-container">
+            <table id="itemList">
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Icon</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Short Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Items will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
     </div>
+
     <footer>
-        <p>&copy; 2024 EFT Loot Manager by Sheox. All rights reserved.</p>
+        <p>&copy; 2024 EFT Loot Manager. All rights reserved.</p>
     </footer>
 </body>
+
 </html>

@@ -1,13 +1,13 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #2c2c2c;
-    color: #fff;
+    background-color: #1e1e1e;
+    color: #c0c0c0;
     margin: 0;
     padding: 0;
 }
 
 header {
-    background-color: #1a1a1a;
+    background-color: #141414;
     padding: 10px;
 }
 
@@ -29,7 +29,7 @@ nav ul li {
 }
 
 nav ul li a {
-    color: #fff;
+    color: #c0c0c0;
     text-decoration: none;
 }
 
@@ -37,31 +37,68 @@ nav ul li a {
     padding: 20px;
 }
 
-.item-color {
-    margin-bottom: 15px;
+.actions {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
 }
 
-.item-color label {
-    margin-right: 10px;
+button {
+    padding: 10px 20px;
+    background-color: #2c2c2c;
+    color: #c0c0c0;
+    border: none;
+    cursor: pointer;
 }
 
-.item-color input[type="color"] {
-    margin-right: 10px;
+button:hover {
+    background-color: #444;
 }
 
-.item-color input[type="number"] {
-    width: 60px;
+input[type="file"],
+input[type="text"] {
+    padding: 10px;
+    background-color: #2c2c2c;
+    color: #c0c0c0;
+    border: 1px solid #444;
+    border-radius: 3px;
 }
 
-.color-preview {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    border: 1px solid #fff;
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+thead {
+    background-color: #2c2c2c;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #444;
+    text-align: left;
+}
+
+th {
+    color: #c0c0c0;
+}
+
+td {
+    color: #c0c0c0;
+}
+
+.item-icon {
+    width: 48px; /* Vergrößerte Größe des Icons */
+    height: 48px;
 }
 
 footer {
-    background-color: #1a1a1a;
+    background-color: #141414;
     padding: 10px;
     text-align: center;
 }

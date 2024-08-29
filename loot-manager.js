@@ -2,7 +2,7 @@
 const fetchItemsBtn = document.getElementById('fetchItemsBtn');
 const saveItemsBtn = document.getElementById('saveItemsBtn');
 const searchBox = document.getElementById('searchBox');
-const itemList = document.getElementById('itemList');
+const itemList = document.querySelector('#itemList tbody');
 const fileUpload = document.getElementById('fileUpload');
 
 // Initial state
@@ -22,8 +22,7 @@ async function fetchItems() {
         items = await response.json();
         displayItems(items);
         isItemsFetched = true;
-        fetchItemsBtn.disabled = true; // Disable button after fetching
-        fileUpload.disabled = false;  // Enable file upload after fetching
+        fileUpload.disabled = false; // Enable file upload after fetching
     } catch (error) {
         console.error('Error fetching items:', error);
         alert('Failed to fetch items.');
@@ -36,16 +35,15 @@ async function fetchItems() {
 function displayItems(items) {
     itemList.innerHTML = '';
     items.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.innerHTML = `
-            <input type="checkbox" id="${item.id}" ${item.checked ? 'checked' : ''}>
-            <label for="${item.id}">
-                <img src="icons/${item.id}-icon.webp" alt="${item.name} Icon" class="item-icon">
-                ${item.id} - ${item.name}
-            </label>
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><input type="checkbox" id="${item.id}" ${item.checked ? 'checked' : ''}></td>
+            <td><img src="icons/${item.id}-icon.webp" alt="${item.name}" class="item-icon"></td>
+            <td>${item.id}</td>
+            <td>${item.name}</td>
+            <td>${item.shortName}</td>
         `;
-        itemList.appendChild(div);
+        itemList.appendChild(row);
     });
 }
 
@@ -65,7 +63,7 @@ function saveItems() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'selected-items.ini';
+    a.download = 'lootextern.ini';
     a.click();
     URL.revokeObjectURL(url);
 }
@@ -94,16 +92,16 @@ function handleFileUpload(event) {
     reader.readAsText(file);
 }
 
+// Search functionality to include short names
+searchBox.addEventListener('input', function () {
+    const query = searchBox.value.toLowerCase();
+    itemList.querySelectorAll('tr').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+    });
+});
+
 // Event listeners
 fetchItemsBtn.addEventListener('click', fetchItems);
 saveItemsBtn.addEventListener('click', saveItems);
 fileUpload.addEventListener('change', handleFileUpload);
-
-// Search functionality
-searchBox.addEventListener('input', function () {
-    const query = searchBox.value.toLowerCase();
-    itemList.querySelectorAll('.item').forEach(item => {
-        const text = item.textContent.toLowerCase();
-        item.style.display = text.includes(query) ? 'flex' : 'none';
-    });
-});
