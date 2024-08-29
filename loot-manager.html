@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EFT Loot Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="loot-manager.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>EFT Loot Manager</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="loot-manager.html">Loot Manager</a></li>
+                    <li><a href="loot-color-manager.html">Loot Color Manager</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <h2>Loot Manager</h2>
+        <p>Manage your loot items here.</p>
+        <button id="fetchItemsBtn">Fetch Items</button>
+        <button id="saveItemsBtn">Save Selected Items</button>
+        <input type="file" id="fileUpload" accept=".ini" />
+        <input type="text" id="searchBox" placeholder="Search items..." />
+        <div id="itemList"></div>
+    </div>
+    <footer>
+        <p>&copy; 2024 EFT Loot Manager by Sheox. All rights reserved.</p>
+    </footer>
+</body>
+</html>

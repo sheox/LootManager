@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EFT Loot Manager - Loot Color Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="loot-color-manager.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>EFT Loot Manager</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="loot-manager.html">Loot Manager</a></li>
+                    <li><a href="loot-color-manager.html">Loot Color Manager</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <h2>Loot Color Manager</h2>
+        <p>Manage the colors of your loot items here.</p>
+        <form id="uploadForm">
+            <input type="file" id="fileUpload" accept=".ini" />
+            <button type="submit" id="uploadButton">Upload</button>
+        </form>
+        <button id="saveButton" style="display:none;">Save</button>
+        <div id="itemColors" class="item-colors"></div>
+    </div>
+    <footer>
+        <p>&copy; 2024 EFT Loot Manager by Sheox. All rights reserved.</p>
+    </footer>
+    <script src="loot-color-manager.js"></script>
+</body>
+</html>
