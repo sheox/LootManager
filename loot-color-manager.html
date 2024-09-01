@@ -15,20 +15,24 @@
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="loot-manager.html">Loot Manager</a></li>
-                    <li><a href="loot-colour-manager.html">Loot Color Manager</a></li>
+                    <li><a href="loot-color-manager.html">Loot Color Manager</a></li>
                 </ul>
             </nav>
         </div>
     </header>
     <div class="container">
-        <h2>Loot Color Manager</h2>
-        <p>Not working for now ... sorry =(, working on it <3.</p>
-        <!--<input type="file" id="fileUpload" accept=".ini" />
-        <button id="saveColorsBtn">Save Colors</button>-->
-        <div id="itemColors" class="item-colors"></div>
+        <h2>Manage Your Loot Colors</h2>
+        <p>Set custom colors for your loot items.</p>
+        <div class="actions">
+            <input type="file" id="fileUpload" accept=".ini">
+            <!--<button id="fetchItemsBtn">Fetch Items</button>-->
+            <button id="saveItemsBtn">Save Selected Items</button>
+            <input type="text" id="searchBox" placeholder="Search items...">
+        </div>
+        <div id="itemList" class="table-container"></div>
     </div>
     <footer>
-        <p>&copy; 2024 EFT Loot Manager. All rights reserved.</p>
+        <p>&copy; 2024 EFT Loot Color Manager. All rights reserved.</p>
     </footer>
 </body>
 </html>

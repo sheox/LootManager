@@ -1,98 +1,60 @@
 // Cache DOM elements
+const saveItemsBtn = document.getElementById('saveItemsBtn');
 const fileUpload = document.getElementById('fileUpload');
-const saveColorsBtn = document.getElementById('saveColorsBtn');
-const itemColors = document.getElementById('itemColors');
+const itemList = document.getElementById('itemList');
+const searchBox = document.getElementById('searchBox');
 
-// Store items and their colors
+// Initial state
 let items = [];
-let colors = {};
 
-// Function to handle file upload
-function handleFileUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+// Function to display items in a table format
+function displayItems(items) {
+    itemList.innerHTML = `
+        <table>
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Icon</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Color</th>
+                    <th>Preview</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${items.map(item => `
+                    <tr>
+                        <td><input type="checkbox" id="${item.id}" ${item.checked ? 'checked' : ''}></td>
+                        <td><img src="icons/${item.id}-icon.webp" alt="${item.name}" class="item-icon"></td>
+                        <td>${item.id}</td>
+                        <td>${item.name}</td>
+                        <td>
+                            <input type="color" value="${item.color ? rgbToHex(item.color) : '#ffffff'}" data-id="${item.id}">
+                        </td>
+                        <td>
+                            <div class="color-preview" style="background-color: ${item.color ? `rgba(${item.color})` : '#ffffff'};"></div>
+                        </td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
 
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        const content = e.target.result;
-        const lines = content.split('\n').filter(line => line.trim() !== '');
-        items = []; // Clear items
-        colors = {}; // Clear colors
-
-        lines.forEach(line => {
-            if (line.includes('=')) {
-                // Format: id=color # name
-                const [idColor, name] = line.split(' #');
-                const [id, color] = idColor.split('=');
-                items.push({ id, name });
-                colors[id] = color; // Store color for each item
-            } else {
-                // Format: id # name
-                const [id, name] = line.split(' #');
-                items.push({ id, name });
-                colors[id] = '255,255,255,1'; // Default color (white)
-            }
-        });
-
-        displayItems();
-    };
-    reader.readAsText(file);
-}
-
-// Function to display items and their colors
-function displayItems() {
-    itemColors.innerHTML = '';
-    items.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'item-color';
-        const color = colors[item.id] || '255,255,255,1'; // Default color (white)
-        div.innerHTML = `
-            <label for="${item.id}">
-                <img src="icons/${item.id}-icon.webp" alt="${item.name} Icon" class="item-icon">
-                ${item.id} - ${item.name}
-                <input type="color" id="${item.id}" value="${rgbaToHex(color)}">
-            </label>
-        `;
-        itemColors.appendChild(div);
-        
-        // Add event listener for color input change
-        const colorInput = document.getElementById(item.id);
-        colorInput.addEventListener('input', function() {
-            colors[item.id] = hexToRgba(colorInput.value); // Update color in the colors object
+    // Add event listeners to color pickers
+    document.querySelectorAll('input[type="color"]').forEach(input => {
+        input.addEventListener('input', function () {
+            const id = this.dataset.id;
+            const item = items.find(item => item.id === id);
+            item.color = hexToRgba(this.value);
+            this.parentElement.nextElementSibling.firstElementChild.style.backgroundColor = `rgba(${item.color})`;
         });
     });
 }
 
-// Convert RGBA to HEX color code
-function rgbaToHex(rgba) {
-    const [r, g, b, a] = rgba.split(',').map(Number);
-    const alpha = Math.round(a * 255); // Convert alpha to 0-255 range
-    return `#${((1 << 24) + (r << 16) + (g << 8) + b + (alpha << 24)).toString(16).slice(1)}`;
-}
-
-// Convert HEX to RGBA color code
-function hexToRgba(hex) {
-    let r = 0, g = 0, b = 0, a = 1;
-    if (hex.length === 7) {
-        r = parseInt(hex.slice(1, 3), 16);
-        g = parseInt(hex.slice(3, 5), 16);
-        b = parseInt(hex.slice(5, 7), 16);
-    } else if (hex.length === 9) {
-        r = parseInt(hex.slice(1, 3), 16);
-        g = parseInt(hex.slice(3, 5), 16);
-        b = parseInt(hex.slice(5, 7), 16);
-        a = parseInt(hex.slice(7, 9), 16) / 255;
-    }
-    return `${r},${g},${b},${a}`;
-}
-
-// Save colors to a file
-function saveColors() {
-    const content = items.map(item => {
-        const color = colors[item.id] || '255,255,255,1'; // Default color (white)
-        return `${item.id}=${color} # ${item.name}`;
-    }).join('\n');
-    const blob = new Blob([content], { type: 'text/plain' });
+// Function to save all items with colors
+function saveItems() {
+    const allItems = items.map(item => `${item.id}=${item.color.join(',')} # ${item.name}`).join('\n');
+    const blob = new Blob([allItems], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -101,6 +63,59 @@ function saveColors() {
     URL.revokeObjectURL(url);
 }
 
+// Function to handle file upload and parse its content
+function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const content = e.target.result;
+        const lines = content.split('\n').filter(line => line.trim() !== '');
+        items = []; // Clear current items
+
+        lines.forEach(line => {
+            let [idColor, name] = line.split(' # ');
+            const [id, color] = idColor.includes('=') ? idColor.split('=') : [idColor, '255,255,255,1'];
+            items.push({
+                id: id,
+                name: name || 'Unknown',
+                color: color.split(',').map(Number),
+                checked: true
+            });
+        });
+
+        displayItems(items);
+    };
+    reader.readAsText(file);
+}
+
+// Function to convert hex color to rgba
+function hexToRgba(hex) {
+    let r = 0, g = 0, b = 0, a = 1;
+    if (hex.length == 7) {
+        r = parseInt(hex.slice(1, 3), 16);
+        g = parseInt(hex.slice(3, 5), 16);
+        b = parseInt(hex.slice(5, 7), 16);
+    }
+    return [r, g, b, a];
+}
+
+// Function to convert rgba to hex
+function rgbToHex(rgba) {
+    const [r, g, b] = rgba;
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
+}
+
 // Event listeners
+saveItemsBtn.addEventListener('click', saveItems);
 fileUpload.addEventListener('change', handleFileUpload);
-saveColorsBtn.addEventListener('click', saveColors);
+
+// Search functionality
+searchBox.addEventListener('input', function () {
+    const query = searchBox.value.toLowerCase();
+    itemList.querySelectorAll('tbody tr').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+    });
+});
