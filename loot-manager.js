@@ -63,7 +63,7 @@ function saveItems() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'lootextern.ini';
+    a.download = 'loot_generated.ini';
     a.click();
     URL.revokeObjectURL(url);
 }
